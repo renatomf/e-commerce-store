@@ -1,13 +1,25 @@
 "use client";
 
-import Container from "@/components/ui/container";
-import useCart from "@/hooks/use-cart";
-import { useEffect, useState } from "react";
-import CartItem from "./_components/cart-item";
-import Summary from "./_components/summary";
+import { useEffect, useState } from 'react';
+
+import Container from '@/components/ui/container';
+import useCart from '@/hooks/use-cart';
+import CartItem from './_components/cart-item';
+import Summary from './_components/summary';
+
+export const revalidate = 0;
 
 const CartPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const cart = useCart();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <div className="bg-white">
@@ -16,14 +28,10 @@ const CartPage = () => {
           <h1 className="text-3xl font-bold text-black">Shopping Cart</h1>
           <div className="mt-12 lg:grid lg:grid-cols-12 lg:items-start gap-x-12">
             <div className="lg:col-span-7">
-              {cart.items.length === 0 &&
-                <p className="text-neutral-500">No Items added to cart</p>}
+              {cart.items.length === 0 && <p className="text-neutral-500">No items added to cart.</p>}
               <ul>
                 {cart.items.map((item) => (
-                  <CartItem
-                    key={item.id}
-                    data={item}
-                  />
+                  <CartItem key={item.id} data={item} />
                 ))}
               </ul>
             </div>
@@ -32,7 +40,7 @@ const CartPage = () => {
         </div>
       </Container>
     </div>
-  );
-}
+  )
+};
 
 export default CartPage;
